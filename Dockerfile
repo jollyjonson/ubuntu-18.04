@@ -107,7 +107,6 @@ apt-get install -y --no-install-recommends \
   libsndfile1-dev \
   libssl-dev \
   libtool \
-  libwebsocketpp-dev \
   libwebsockets-dev \
   locales-all \
   lzop \
@@ -132,6 +131,9 @@ apt-get install -y --no-install-recommends \
   vim \
   zip \
   zlib1g-dev
+
+# install backport of websocket++, all versions available by default for 18.04 have a boost related bug (s. https://github.com/zaphoyd/websocketpp/issues/794)
+add-apt-repository ppa:savoury1/backports && apt-get install -y --no-install-recommends libwebsocketpp-dev
 
 case "$TARGETPLATFORM" in
     "linux/amd64")
