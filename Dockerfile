@@ -32,6 +32,8 @@ ENV TARGETOS=${TARGETOS}
 ENV TARGETPLATFORM=${TARGETPLATFORM}
 RUN echo "*******************\nI am running on $BUILDPLATFORM, building for $TARGETPLATFORM\n *******************"
 
+ARG BOOST_VERSION=1.83.0
+
 # KEEP PACKAGES SORTED ALPHABETICALY
 # Do everything in one RUN command
 RUN /bin/bash <<EOF
@@ -100,7 +102,6 @@ apt-get install -y --no-install-recommends \
   kmod \
   libasound2-dev \
   libavahi-compat-libdnssd-dev \
-  libboost-all-dev \
   libc6-dev \
   libcurl4 \
   libcurl4-openssl-dev \
@@ -134,6 +135,14 @@ apt-get install -y --no-install-recommends \
 
 # install backport of websocket++, all versions available by default for 18.04 have a boost related bug (s. https://github.com/zaphoyd/websocketpp/issues/794)
 add-apt-repository ppa:savoury1/backports && apt-get install -y --no-install-recommends libwebsocketpp-dev
+
+cd /tmp && \
+  wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_$(echo ${BOOST_VERSION} | tr . _).tar.bz2 && \
+  tar --bzip2 -xf boost_$(echo ${BOOST_VERSION} | tr . _).tar.bz2 && \
+  cd boost_$(echo ${BOOST_VERSION} | tr . _) && \
+  ./bootstrap.sh --with-python=python --prefix=/usr/local && \
+  ./b2 install && \
+  cd .. && rm -rf /tmp/*
 
 case "$TARGETPLATFORM" in
     "linux/amd64")
