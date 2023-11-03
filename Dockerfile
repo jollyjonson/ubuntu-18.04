@@ -136,6 +136,7 @@ apt-get install -y --no-install-recommends \
 # install backport of websocket++, all versions available by default for 18.04 have a boost related bug (s. https://github.com/zaphoyd/websocketpp/issues/794)
 add-apt-repository ppa:savoury1/backports && apt-get install -y --no-install-recommends libwebsocketpp-dev
 
+# download, build and install the specific boost version from source given by the BOOST_VERSION ARG
 cd /tmp && \
   wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_$(echo ${BOOST_VERSION} | tr . _).tar.bz2 && \
   tar --bzip2 -xf boost_$(echo ${BOOST_VERSION} | tr . _).tar.bz2 && \
